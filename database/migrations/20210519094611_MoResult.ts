@@ -3,13 +3,14 @@ import { Knex } from "knex";
 export async function up(knex: Knex): Promise<void> {
     return knex.schema.createTable('mo_result', table => {
         table.increments('id')
-        table.string('manufacturingOrder')
-        table.dateTime('actualStartDate')
-        table.dateTime('actualFinishDate')
-        table.integer('availableItemOutput')
-        table.boolean('inputCheck')
-        table.boolean('resultCheck')
-        table.integer('standardPalletQuantity')
+        table.string('MfgOrderNo')
+        table.dateTime('ProdStActDt')
+        table.dateTime('ProdEndActDt')
+        table.string('ItmCD')
+        table.string('LineCD')
+        table.integer('ProdActQty')
+        table.boolean('InputCheck')
+        table.boolean('ResultCheck')
         table.timestamps()
     })
 }

@@ -8,18 +8,19 @@ class MoController {
     const date = new Date
     try {
       await knex('MO').insert({
-        manufacturingOrder: req.body.manufacturingOrder,
-        operationStatus: req.body.operationStatus,
-        itemCode: req.body.itemCode,
-        scheduleStartDate: req.body.scheduleStartDate,
-        scheduleManufacturingQuantity: req.body.scheduleManufacturingQuantity,
-        scheduleBacklog: req.body.scheduleBacklog,
-        actualStartDate: req.body.actualStartDate,
-        actualFinishDate: req.body.actualFinishDate,
-        availableItemOutput: req.body.availableItemOutput,
-        lineCode: req.body.lineCode,
-        lineName: req.body.lineName,
-        standardPalletQuantity: req.body.standardPalletQuantity,
+        MfgOrderNo: req.body.MfgOrderNo,
+        OrdStsTypNm: req.body.OrdStsTypNm,
+        ItmCD: req.body.ItmCD,
+        ProdStSchdDt: req.body.ProdStSchdDt,
+        ProdEndSchdDt: req.body.ProdEndSchdDt,
+        ProdStSchdQty: req.body.ProdStSchdQty,
+        ProdStSchdBackLogQty: req.body.ProdStSchdBackLogQty,
+        ProdStActDt: req.body.ProdStActDt,
+        ProdEndActDt: req.body.ProdEndActDt,
+        ProdLocCD: req.body.ProdLocCD,
+        LineCD: req.body.LineCD,
+        LineNm: req.body.LineNm,
+        StdPckgQty: req.body.StdPckgQty,
         created_at: date,
         updated_at: date
       })
@@ -33,10 +34,10 @@ class MoController {
 
     try {
       const lineCode: string = req.query.lineCode.toString()
-      const operationStatus: string = req.query.operationStatus.toString()
+      // const operationStatus: string = req.query.operationStatus.toString()
 
       const result = await knex.select('*').from('MO').where('lineCode', '=', lineCode)
-        .andWhere('operationStatus', '=', operationStatus)
+        // .andWhere('operationStatus', '=', operationStatus)
 
       res.send(result).status(200)
     } catch (error) {
@@ -49,34 +50,50 @@ class MoController {
     const date = new Date
     try {
       await knex('mo_result').insert({
-        manufacturingOrder: req.body.manufacturingOrder,
-        actualStartDate: req.body.actualStartDate,
-        actualFinishDate: req.body.actualFinishDate,
-        availableItemOutput: req.body.availableItemOutput,
-        inputCheck: req.body.inputCheck,
-        resultCheck: req.body.resultCheck,
-        created_at : date,
-        updated_at : date
+        MfgOrderNo: req.body.MfgOrderNo,
+        ProdStActDt: req.body.ProdStActDt,
+        ProdEndActDt: req.body.ProdEndActDt,
+        ItmCD: req.body.ItmCD,
+        LineCD: req.body.LineCD,
+        InputCheck: req.body.InputCheck,
+        ResultCheck: req.body.ResultCheck,
+        created_at: date,
+        updated_at: date
       })
-      
+
       let defect = new Array
 
-      defect = Object.assign([],req.body.defect)
-      
+      defect = Object.assign([], req.body.Defect)
+
       for (let index = 0; index < defect.length; index++) {
         try {
           await knex('defect').insert({
-            defectiveQuantity: defect[index].defectiveQuantity,
-            defectiveReason: defect[index].defectiveReason,
+            DefectiveQuantity: defect[index].DefectiveQuantity,
+            DefectiveReason: defect[index].DefectiveReason,
+            DefectiveStorageLocCD: defect[index].DefectiveStorageLocCD,
             manufacturingOrder: req.body.manufacturingOrder,
-            created_at : date,
-            updated_at : date
+            created_at: date,
+            updated_at: date
           })
         } catch (error) {
           return res.send(error)
         }
       }
 
+      res.send('ok')
+    } catch (error) {
+      return res.send(error)
+    }
+  }
+
+  static async edit(req: Request, res: Response) {
+    try {
+      await knex('MO')
+        .where('MfgOrderNo', '=', req.body.MfgOrderNo)
+        .update({
+          OrdStsTypNm: '7',
+          ProdStActDt: req.body.ProdStActDt
+        })
       res.send('ok')
     } catch (error) {
       return res.send(error)
