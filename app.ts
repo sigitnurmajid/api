@@ -21,7 +21,7 @@ app.listen(port, () => {
     console.log(`Your application is running on port ${port}.`);
 });
 
-app.get('api/MfgOrderList/getMO', MoController.index);
-app.post('api/MfgResult/PostMfgResult',MoController.save)
+app.get('/api/MfgOrderList/getMO', MoController.index);
+app.post('/api/MfgResult/PostMfgResult',MoController.save)
 app.post('/createMo', MoController.store)
-app.put('api/MfgProduction/PutMfgProduction', MoController.edit)
+app.put('/api/MfgProduction/PutMfgProduction', MoController.edit)
